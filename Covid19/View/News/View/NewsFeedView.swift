@@ -6,15 +6,41 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct NewsFeedView: View {
+    var articleViewModel: ArticleViewModel
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+        HStack {
+            KFImage(articleViewModel.imageAvatar)
+                .placeholder({
+                    ProgressView()
+                })
+                .resizable()
+                .scaledToFill()
+                .frame(width: 100, height: 120)
+                .clipped()
+                .cornerRadius(12)
+            
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(articleViewModel.title)
+                    .font(.subheadline)
+                    .multilineTextAlignment(.leading)
 
-struct NewsFeedView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewsFeedView()
+                HStack {
+                    Text(articleViewModel.author)
+                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                    Spacer()
+                    Text(articleViewModel.publishDate)
+                        .font(.system(size: 11, weight: .light, design: .rounded))
+                        .multilineTextAlignment(.leading)
+                }
+                
+            }.padding(.horizontal, 12)
+        }
+        .padding(12)
     }
 }

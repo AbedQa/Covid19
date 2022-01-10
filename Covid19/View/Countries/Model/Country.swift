@@ -11,4 +11,5 @@ struct Country: Codable {
     let name: String?
     let capital: String?
     let region: String?
+    let alpha2Code: String?
 }

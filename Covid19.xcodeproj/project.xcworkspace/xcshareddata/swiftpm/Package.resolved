@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "GridStack",
+        "repositoryURL": "https://github.com/pietropizzi/GridStack.git",
+        "state": {
+          "branch": null,
+          "revision": "32beadda5eacbb05f4d5195df3b049d5e040f5db",
+          "version": "0.4.1"
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "0c02c46cfdc0656ce74fd0963a75e5000a0b7f23",
+          "version": "7.1.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

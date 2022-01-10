@@ -1,5 +1,5 @@
 //
-//  CovidServices.swift
+//  NewsService.swift
 //  Covid19
 //
 //  Created by AbdelrahmanQasim on 1/9/22.
@@ -12,7 +12,7 @@ protocol NewsServiceable {
     func news(countryName: String,category: String) -> AnyPublisher<News, NetworkError>
 }
 
-class CovidService: NewsServiceable {
+class NewsService: NewsServiceable {
 
     private var networkRequest: Requestable
     private var environment: Environments = .news

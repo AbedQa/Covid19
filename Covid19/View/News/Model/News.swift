@@ -8,6 +8,8 @@
 import Foundation
 
 // MARK: - News
+
+// MARK: - News
 struct News: Codable {
     let status: String?
     let totalResults: Int?
@@ -17,10 +19,12 @@ struct News: Codable {
 // MARK: - Article
 struct Article: Codable {
     let source: Source?
-    let author, title, articleDescription: String?
+    let author: String?
+    let title: String?
+    let articleDescription: String?
     let url: String?
     let urlToImage: String?
-    let publishedAt: Date?
+    let publishedAt: String?
     let content: String?
 
     enum CodingKeys: String, CodingKey {

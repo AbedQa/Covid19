@@ -1,5 +1,5 @@
 //
-//  CountryViewModel.swift
+//  CountryListViewModel.swift
 //  Covid19
 //
 //  Created by AbdelrahmanQasim on 1/9/22.
@@ -8,39 +8,58 @@
 import Foundation
 import Combine
 
-class CountryViewModel: ObservableObject, LoadableObject {
-    typealias Output = [ArticleViewModel]
+class CountryListViewModel: ObservableObject, LoadableObject {
+    typealias Output = [CountryItemViewModel]
     
-    
-    private var service: NewsServiceable
-    private var articleViewModelList: [ArticleViewModel] = []
     private var disposables = Set<AnyCancellable>()
+    private var service: CountryServiceable
     
-    @Published var countryName: String = "us"
-    @Published var category: String = "business"
-    @Published private(set) var state = LoadingState<[ArticleViewModel]>.idle
+    @Published var countrySelectedItem: String = ""
+    @Published var countryViewModelList: [CountryItemViewModel] = []
+    @Published var searchedCountryList = [CountryItemViewModel]()
+    @Published var searching = false
+    @Published private(set) var state = LoadingState<[CountryItemViewModel]>.idle
     
     // inject this for testability
-    init(service: NewsServiceable = NewsService()) {
+    init(service: CountryServiceable = CountryService()) {
         self.service = service
     }
     
     func load() {
         state = .loading
-        service.news(countryName: countryName, category: category)
-            .map { $0.articles ?? [] }
+        service.countries()
+            .map { $0 }
             .replaceEmpty(with: [])
             .sink { response in
                 switch response {
-                case .failure(let error):
-                    self.state = .failed(error)
+                case .failure(_):
+                    self.countryViewModelList = self.getAllCountryFromFile().map { CountryItemViewModel(country: $0) }
+                    self.searchedCountryList = self.countryViewModelList
+                    self.state = .loaded(self.searchedCountryList)
                     break
                 case .finished:
-                    self.state = .loaded(self.articleViewModelList)
+                    self.searchedCountryList = self.countryViewModelList
+                    self.state = .loaded(self.searchedCountryList)
                 }
             } receiveValue: { value in
-                self.articleViewModelList = value.map { ArticleViewModel(article: $0) }
+                self.countryViewModelList = value.map { CountryItemViewModel(country: $0) }
             }.store(in: &disposables)
+    }
+    
+    private func getAllCountryFromFile() -> [Country] {
+        do {
+            if let countryFilePath = Bundle.main.path(forResource: "CountryMock", ofType: "txt") {
+                let offetFileText = try String(contentsOfFile: countryFilePath, encoding: .utf8)
+                if let data = offetFileText.data(using: .utf8) {
+                    let decodedCountries = try! JSONDecoder().decode([Country].self, from: data)
+                    return decodedCountries
+                }
+                return []
+            }
+            return []
+        } catch {
+            return []
+        }
     }
 }
 
